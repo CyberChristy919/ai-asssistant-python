@@ -1,37 +1,89 @@
-# Number Guessing Game
+# Python Number Games and Utilities
 
-A beginner Python project that lets the user guess a randomly generated number.
+This repository contains two simple Python scripts:
 
-## Description
-
-This program chooses a random number between 1 and 100 and asks the user to guess it.  
-After each guess, the program tells the user whether the guess was too low, too high, or correct.
+- `guess_numberss.py` — a number guessing game.
+- `sort_numbers.py` — reads numbers from a text file, sorts them, and writes the results to a new file.
 
 ## Requirements
 
-- Python 3
+- Python 3 installed
+- A terminal such as Ubuntu Terminal, PowerShell, or Command Prompt
+
+Check your Python version with:
+
+```bash
+python3 --version
+```
+
+## Files
+
+- `guess_numberss.py`
+- `sort_numbers.py`
+- `numbers.txt` (used for testing `sort_numbers.py`)
+- `processed_numbers.txt` (created after running `sort_numbers.py`)
 
 ## How to Run
 
-From the project folder, run:
+### Run the guessing game
 
 ```bash
-python3 guess_numbers.py
+python3 guess_numberss.py
 ```
 
-If your system uses `python` for Python 3, you can also run:
+This script starts a number guessing game in the terminal.
+
+### Run the sorting script
 
 ```bash
-python guess_numbers.py
+python3 sort_numbers.py
 ```
 
-## Features
+This script looks for `.txt` files in the current directory, reads numeric values from them, ignores non-numeric lines, sorts the numbers, and writes the sorted values and total sum to a new processed file.
 
-- Random number generation
-- User input with `input()`
-- Looping with `while`
-- Error handling with `try` and `except ValueError`
+## Testing `sort_numbers.py`
 
-## File
+Create a file named `numbers.txt` in the same directory as `sort_numbers.py`.
 
-- `guess_numbers.py` - main game script
+Example `numbers.txt`:
+
+```text
+10
+4
+7.5
+2
+apple
+12
+```
+
+Then run:
+
+```bash
+python3 sort_numbers.py
+```
+
+Expected behavior:
+
+- The script reads `numbers.txt`
+- Ignores non-numeric lines such as `apple`
+- Sorts the numeric values
+- Creates a file named `processed_numbers.txt`
+
+## Example output file
+
+After running `sort_numbers.py`, the generated `processed_numbers.txt` file should look similar to this:
+
+```text
+Sorted Numbers:
+2.0
+4.0
+7.5
+10.0
+12.0
+Sum of Numbers:
+35.5
+```
+
+## Notes
+
+- Make sure you run the scripts from the directory where the files are located.
