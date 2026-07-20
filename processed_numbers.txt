@@ -1,0 +1,7 @@
+Sorted Numbers:
+2.0
+4.0
+7.5
+10.0
+Sum of Numbers:
+23.5
