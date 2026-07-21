@@ -88,8 +88,18 @@ output_text.pack(fill=tk.BOTH, expand=False, padx=12, pady=8)
 packages_label = tk.Label(root, text="Installed packages")
 packages_label.pack()
 
-packages_text = scrolledtext.ScrolledText(root, height=18, width=95, wrap=tk.NONE)
+packages_text = scrolledtext.ScrolledText(
+    root,
+    height=18,
+    width=95,
+    wrap=tk.NONE,
+    bg="white",
+    fg="black",
+    insertbackground="black",
+    font=("Courier New", 10)
+)
 packages_text.pack(fill=tk.BOTH, expand=True, padx=12, pady=8)
+packages_text.config(state=tk.DISABLED)
 
 show_installed_packages()
 
