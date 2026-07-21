@@ -2,6 +2,7 @@ import subprocess
 import sys
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import scrolledtext
 
 
 def run_pip_command(args):
@@ -50,7 +51,8 @@ def show_installed_packages():
 
 root = tk.Tk()
 root.title("Pip Package Installer")
-root.geometry("900x650")
+root.geometry("820x720")
+root.minsize(700, 560)
 
 header = tk.Label(root, text="Pip Package Installer", font=("Arial", 16, "bold"))
 header.pack(pady=12)
@@ -65,11 +67,14 @@ package_entry = tk.Entry(entry_frame, width=30)
 package_entry.grid(row=0, column=1, padx=8, pady=8)
 package_entry.insert(0, "folium")
 
-install_button = tk.Button(root, text="Install Package", command=install_package, width=20)
-install_button.pack(pady=6)
+button_frame = tk.Frame(root)
+button_frame.pack(pady=6)
 
-refresh_button = tk.Button(root, text="Refresh Installed Packages", command=show_installed_packages, width=24)
-refresh_button.pack(pady=4)
+install_button = tk.Button(button_frame, text="Install Package", command=install_package, width=20)
+install_button.grid(row=0, column=0, padx=6)
+
+refresh_button = tk.Button(button_frame, text="Refresh Installed Packages", command=show_installed_packages, width=24)
+refresh_button.grid(row=0, column=1, padx=6)
 
 status_label = tk.Label(root, text="Enter a package name and click Install Package.", fg="blue")
 status_label.pack(pady=8)
@@ -77,14 +82,14 @@ status_label.pack(pady=8)
 output_title = tk.Label(root, text="Installation output")
 output_title.pack()
 
-output_text = tk.Text(root, height=10, width=100)
-output_text.pack(padx=12, pady=8)
+output_text = scrolledtext.ScrolledText(root, height=10, width=95, wrap=tk.WORD)
+output_text.pack(fill=tk.BOTH, expand=False, padx=12, pady=8)
 
 packages_label = tk.Label(root, text="Installed packages")
 packages_label.pack()
 
-packages_text = tk.Text(root, height=18, width=100)
-packages_text.pack(padx=12, pady=8)
+packages_text = scrolledtext.ScrolledText(root, height=18, width=95, wrap=tk.NONE)
+packages_text.pack(fill=tk.BOTH, expand=True, padx=12, pady=8)
 
 show_installed_packages()
 
