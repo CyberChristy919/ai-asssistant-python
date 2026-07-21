@@ -3,7 +3,6 @@ import sys
 import tkinter as tk
 from tkinter import messagebox
 
-
 def install_package():
     package_name = package_entry.get().strip()
     if not package_name:
@@ -29,11 +28,9 @@ def install_package():
         status_label.config(text=f"Failed to install {package_name}.", fg="red")
         messagebox.showerror("Installation Error", f"Could not install {package_name}.")
 
-
 root = tk.Tk()
 root.title("Pip Package Installer")
-root.geometry("700x420")
-root.resizable(False, False)
+root.geometry("520x420")
 
 header = tk.Label(root, text="Pip Package Installer", font=("Arial", 16, "bold"))
 header.pack(pady=12)
@@ -44,17 +41,17 @@ frame.pack(pady=8)
 label = tk.Label(frame, text="Package name:")
 label.grid(row=0, column=0, padx=8, pady=8, sticky="w")
 
-package_entry = tk.Entry(frame, width=40)
+package_entry = tk.Entry(frame, width=30)
 package_entry.grid(row=0, column=1, padx=8, pady=8)
 package_entry.insert(0, "folium")
 
-install_button = tk.Button(frame, text="Install Package", command=install_package, width=18)
-install_button.grid(row=0, column=2, padx=8, pady=8)
+install_button = tk.Button(root, text="Install Package", command=install_package, width=20)
+install_button.pack(pady=6)
 
 status_label = tk.Label(root, text="Enter a package name and click Install Package.", fg="blue")
 status_label.pack(pady=8)
 
-output_text = tk.Text(root, height=16, width=82)
+output_text = tk.Text(root, height=16, width=60)
 output_text.pack(padx=12, pady=10)
 
 root.mainloop()
