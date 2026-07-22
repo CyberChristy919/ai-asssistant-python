@@ -61,4 +61,34 @@ def geocode_locations(entries):
 
 
 def build_map(locations):
-    
+    if not locations:
+        raise RuntimeError("No valid locations found.")
+
+    average_lat = sum(item["lat"] for item in locations) / len(locations)
+    average_lon = sum(item["lon"] for item in locations) / len(locations)
+
+    map_object = folium.Map(location=[average_lat, average_lon], zoom_start=2)
+
+    for item in locations:
+        folium.Marker(
+            [item["lat"], item["lon"]],
+            popup=f'{item["location"]}: {item["hits"]} hits/day',
+            tooltip=item["location"],
+        ).add_to(map_object)
+
+    map_object.save(OUTPUT_HTML)
+
+
+def main():
+    if not INPUT_FILE.exists():
+        raise FileNotFoundError(f"Missing file: {INPUT_FILE}")
+
+    entries = parse_file(INPUT_FILE)
+    locations = geocode_locations(entries)
+    build_map(locations)
+
+    print(f"Created map: {OUTPUT_HTML}")
+
+
+if __name__ == "__main__":
+    main()
