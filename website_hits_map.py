@@ -1,5 +1,4 @@
 import re
-import time
 from pathlib import Path
 
 import folium
@@ -7,88 +6,31 @@ from geopy.geocoders import Nominatim
 
 BASE_DIR = Path(__file__).resolve().parent
 INPUT_FILE = BASE_DIR / "website_hits.txt"
-OUTPUT_HTML = BASE_DIR / "website_hits_map.html"
+OUTPUT_FILE = BASE_DIR / "website_hits_map.html"
 
+geolocator = Nominatim(user_agent="website_hits_map")
 
-def parse_file(path):
-    entries = []
+m = folium.Map(location=[20, 0], zoom_start=2)
 
-    with open(path, "r", encoding="utf-8") as file:
-        for line in file:
-            line = line.strip()
-            if not line:
-                continue
-
-            match = re.match(r"^(.*?):\s*(\d+)\s*$", line)
-            if not match:
-                print(f"Skipping invalid line: {line}")
-                continue
-
-            location = match.group(1).strip()
-            hits = int(match.group(2))
-            entries.append((location, hits))
-
-    return entries
-
-
-def geocode_locations(entries):
-    geolocator = Nominatim(user_agent="website_hits_mapper")
-    locations = []
-
-    for location, hits in entries:
-        try:
-            result = geolocator.geocode(location, timeout=10)
-        except Exception as error:
-            print(f"Error looking up {location}: {error}")
+with open(INPUT_FILE, "r", encoding="utf-8") as file:
+    for line in file:
+        line = line.strip()
+        if not line:
             continue
 
-        if result is None:
-            print(f"Could not locate: {location}")
+        match = re.match(r"^(.*?):\s*(\d+)$", line)
+        if not match:
             continue
 
-        locations.append(
-            {
-                "location": location,
-                "hits": hits,
-                "lat": result.latitude,
-                "lon": result.longitude,
-            }
-        )
+        city = match.group(1)
+        hits = match.group(2)
 
-        time.sleep(1)
+        location = geolocator.geocode(city)
+        if location:
+            folium.Marker(
+                [location.latitude, location.longitude],
+                popup=f"{city}: {hits}"
+            ).add_to(m)
 
-    return locations
-
-
-def build_map(locations):
-    if not locations:
-        raise RuntimeError("No valid locations found.")
-
-    average_lat = sum(item["lat"] for item in locations) / len(locations)
-    average_lon = sum(item["lon"] for item in locations) / len(locations)
-
-    map_object = folium.Map(location=[average_lat, average_lon], zoom_start=2)
-
-    for item in locations:
-        folium.Marker(
-            [item["lat"], item["lon"]],
-            popup=f'{item["location"]}: {item["hits"]} hits/day',
-            tooltip=item["location"],
-        ).add_to(map_object)
-
-    map_object.save(OUTPUT_HTML)
-
-
-def main():
-    if not INPUT_FILE.exists():
-        raise FileNotFoundError(f"Missing file: {INPUT_FILE}")
-
-    entries = parse_file(INPUT_FILE)
-    locations = geocode_locations(entries)
-    build_map(locations)
-
-    print(f"Created map: {OUTPUT_HTML}")
-
-
-if __name__ == "__main__":
-    main()
+m.save(OUTPUT_FILE)
+print("Map created:", OUTPUT_FILE)
